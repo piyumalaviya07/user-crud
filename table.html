@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="table.css">
+    <title>Table Design</title>
+</head>
+<body>
+<div class="card">
+    <div class="header">
+      <div>
+        <h2>New Arrivals</h2>
+        </div>
+        <div id="form" class="form">
+             <label>Id:</label>
+            <input type="number" id="id">
+             <label>Name:</label>
+            <input type="text" id="name">
+             <label>Email:</label>
+            <input type="email" id="email">
+             <label>Age:</label>
+            <input type="number" id="age">
+        </div>
+
+        <div class="btn">
+            <button  onclick="addData()">Add</button>
+            <button id="updateBtn" onclick="updateData()" style="display:none;">Update</button>
+        </div>
+      </div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="tablebody"></tbody>
+        </table>
+  <script>
+    let tableData = [];
+    let editIndex = -1;
+
+    function renderTable() {
+      const tbody = document.getElementById("tablebody");
+      tbody.innerHTML = "";
+
+      tableData.forEach((item, index) => {
+        const row = `<tr>
+          <td>${item.id}</td>
+          <td>${item.name}</td>
+          <td>${item.email}</td>
+          <td>${item.age}</td>
+          <td>
+            <button onclick="editData(${index})">Edit</button>
+            <button onclick="deleteData(${index})">Delete</button>
+          </td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+    
+    function addData() {
+      const id = document.getElementById("id").value;
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const age = document.getElementById("age").value;
+
+      if (!id || !name || !email || !age) return alert("Please fill all fields");
+
+      tableData.push({id, name, email, age});
+      clearForm();
+      renderTable();
+      saveTolocal();
+    }
+
+     function editData(index) {
+       editIndex = index;
+       document.getElementById("id").value = tableData[index].id;
+       document.getElementById("name").value = tableData[index].name;
+       document.getElementById("email").value = tableData[index].email;
+       document.getElementById("age").value = tableData[index].age;
+       document.getElementById("updateBtn").style.display = "inline-block";
+     }
+
+     function updateData() {
+       const id = document.getElementById("id").value;
+       const name = document.getElementById("name").value;
+       const email = document.getElementById("email").value;
+       const age = document.getElementById("age").value;
+
+       if (!id || !name || !email || !age) return alert("Please fill all fields");
+
+       tableData[editIndex] = {id, name, email, age };
+       clearForm();
+       renderTable();
+       saveTolocal();
+       document.getElementById("updateBtn").style.display = "none";
+     }
+
+     function deleteData(index) {
+        alert("Are You Sure You want to Delete this!!");
+       tableData.splice(index, 1);
+       renderTable();
+    }
+
+    function clearForm() {
+      document.getElementById("id").value="";
+      document.getElementById("name").value = "";
+      document.getElementById("email").value="";
+      document.getElementById("age").value = "";
+    }
+  </script>
+</div>
+</body>
+</html>

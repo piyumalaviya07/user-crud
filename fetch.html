@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Add/Edit/Delete</title>
+
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        table, th, td { border: 1px solid #555; padding: 10px; }
+        th { background: #eee; }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modalBox {
+            background: white;
+            padding: 20px;
+            width: 350px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+        }
+
+        button {
+            padding: 7px 15px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>User Management (Add, Edit, Delete)</h2>
+<button onclick="openAddForm()">Add User</button><br><br>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Company</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tablebody"></tbody>
+</table>
+
+<!-- POPUP FORM -->
+<div id="modal">
+    <div id="modalBox">
+        <h3 id="formTitle">Add User</h3>
+
+        <input type="hidden" id="userId">
+
+        <label>Name</label>
+        <input type="text" id="name">
+
+        <label>Email</label>
+        <input type="email" id="email">
+
+        <label>Phone</label>
+        <input type="text" id="phone">
+
+        <label>Address</label>
+        <input type="text" id="address">
+
+        <label>Company</label>
+        <input type="text" id="company">
+
+        <button onclick="saveUser()">Save</button>
+        <button onclick="closeForm()">Cancel</button>
+    </div>
+</div>
+
+<script>
+    let usersData = [];
+    let isEdit = false;
+
+    // LOAD USERS
+    fetch("https://dummyjson.com/users")
+        .then(res => res.json())
+        .then(data => {
+            usersData = data.users;
+            renderTable();
+        });
+
+    // RENDER TABLE
+    function renderTable() {
+        const tablebody = document.getElementById("tablebody");
+        tablebody.innerHTML = "";
+
+        usersData.forEach(user => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td><img src="${user.image}" width="40"></td>
+                <td>${user.firstName} ${user.lastName}</td>
+                <td>${user.email}</td>
+                <td>${user.phone}</td>
+                <td>${user.address?.address || ""}, ${user.address?.city || ""}</td>
+                <td>${user.company?.name || ""}</td>
+                <td>
+                    <button onclick="openEditForm(${user.id})">Edit</button>
+                    <button onclick="deleteUser(${user.id})">Delete</button>
+                </td>
+            `;
+
+            tablebody.appendChild(row);
+        });
+    }
+
+    // OPEN ADD FORM
+    function openAddForm() {
+        isEdit = false;
+        document.getElementById("formTitle").innerText = "Add User";
+        document.getElementById("userId").value = "";
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("address").value = "";
+        document.getElementById("company").value = "";
+        document.getElementById("modal").style.display = "flex";
+    }
+
+    // OPEN EDIT FORM
+    function openEditForm(id) {
+        isEdit = true;
+        const user = usersData.find(u => u.id === id);
+
+        document.getElementById("formTitle").innerText = "Edit User";
+        document.getElementById("userId").value = id;
+        document.getElementById("name").value = `${user.firstName} ${user.lastName}`;
+        document.getElementById("email").value = user.email;
+        document.getElementById("phone").value = user.phone;
+        document.getElementById("address").value = user.address?.address || "";
+        document.getElementById("company").value = user.company?.name || "";
+
+        document.getElementById("modal").style.display = "flex";
+    }
+
+    // CLOSE POPUP
+    function closeForm() {
+        document.getElementById("modal").style.display = "none";
+    }
+
+    // SAVE USER
+    function saveUser() {
+        let id = document.getElementById("userId").value;
+        let fullName = document.getElementById("name").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let phone = document.getElementById("phone").value.trim();
+        let address = document.getElementById("address").value.trim();
+        let company = document.getElementById("company").value.trim();
+
+        if (fullName === "") {
+            alert("Name is Required!");
+            return;
+        }
+
+        if (email === "") {
+            alert("Email is Required!");
+            return;
+        }
+
+        if (!email.includes("@")) {
+            alert("Email must contain @ symbol!");
+            return;
+        }
+
+        if (isEdit) {
+            updateUser(id, fullName, email, phone, address, company);
+        } else {
+            addUser(fullName, email, phone, address, company);
+        }
+
+        closeForm();
+    }
+
+    // ADD USER
+    function addUser(name, email, phone, address, company) {
+        let newUser = {
+            id: usersData.length + 1,
+            image: "https://robohash.org/" + Math.random(),
+            firstName: name.split(" ")[0],
+            lastName: name.split(" ")[1] || "",
+            email,
+            phone,
+            address: { address, city: "Unknown" },
+            company: { name: company }
+        };
+
+        usersData.push(newUser);
+        renderTable();
+    }
+
+    // UPDATE USER
+    function updateUser(id, name, email, phone, address, company) {
+        let user = usersData.find(u => u.id == id);
+
+        fetch(`https://dummyjson.com/users/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                firstName: name.split(" ")[0],
+                lastName: name.split(" ")[1] || "",
+                email,
+                phone,
+                address: { address },
+                company: { name: company }
+            })
+        })
+        .then(res => res.json())
+        .then(updated => {
+            user.firstName = updated.firstName;
+            user.lastName = updated.lastName;
+            user.email = updated.email;
+            user.phone = updated.phone;
+            user.address = updated.address;
+            user.company = updated.company;
+
+            renderTable();
+        });
+    }
+
+    // DELETE USER
+    function deleteUser(id) {
+        if (!confirm("Delete user?")) return;
+
+        fetch(`https://dummyjson.com/users/${id}`, { method: "DELETE" })
+            .then(res => res.json())
+            .then(() => {
+                usersData = usersData.filter(u => u.id !== id);
+                renderTable();
+            });
+    }
+</script>
+
+</body>
+</html>
+

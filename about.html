@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About-Coding</title>
+    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Coding</div>
+
+            <ul class="nav-links">
+                <li><a href="webpage.html">Home</a></li>
+                <li><a class="active" href="about.html">About</a></li>
+                <li><a href="#">Service</a></li>
+                <li><a href="#">Design</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+
+            <div class="search-box">
+                <input type="text" placeholder="Type to Search">
+                <button>Search</button>
+            </div>
+
+            <div class="hamburger"><i class="fa fa-bars"></i></div>
+        </nav>
+    </header>
+
+    <section class="about-section">
+
+        <div class="about-content">
+            <h1>About Us</h1>
+            <p>
+                At <span>Coding</span>, we are passionate about creating beautiful, responsive,
+                and modern websites. Our goal is to educate and empower learners to understand
+                the complete process of web design and development.
+            </p>
+
+            <p>
+                We provide training in HTML, CSS, JavaScript, Responsive Design,
+                UI/UX principles, layout designing, and web development workflows.  
+                Whether you are a beginner or want to improve your skills, our course
+                curriculum is designed to guide you step-by-step.
+            </p>
+
+            <button class="learn-btn">Learn More</button>
+        </div>
+    </section>
+
+    <!-- RESPONSIVE MENU SCRIPT -->
+    <script>
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.onclick = () => {
+            navLinks.classList.toggle("active");
+        };
+    </script>
+
+</body>
+</html>

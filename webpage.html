@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Design & Development</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Coding</div>
+
+            <ul class="nav-links">
+                <li><a href="webpage.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#">Service</a></li>
+                <li><a href="#">Design</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+
+            <div class="search-box">
+                <input type="text" placeholder="Type to Search">
+                <button>Search</button>
+            </div>
+
+            <div class="hamburger"><i class="fa fa-bars"></i></div>
+        </nav>
+    </header>
+    <section class="hero">
+
+        <div class="left-content">
+            <h1>Web Design & <br><span>Development</span><br>Course</h1>
+            <p>
+                Web Design is a specialisation of the design stream.They also use <br>HTML, CSS, WYSIWYG editing software, markup validators etc.,<br> to create design elements.
+            </p>
+
+            <button class="join-btn">JOIN US</button>
+        </div>
+
+        <div class="login-box">
+            <h2>Login Here</h2>
+
+            <input type="email" placeholder="Enter Email Here">
+            <input type="password" placeholder="Enter Password Here">
+
+            <button class="login-btn">Login</button>
+
+            <p class="signup-text">Don't have an account?  
+                <a href="registration.html">Sign up</a> here
+            </p>
+
+            <p class="social-text">Log in with</p>
+
+            <div class="social-icons">
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-google"></i>
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.onclick = () => {
+            navLinks.classList.toggle("active");
+        };
+    </script>
+
+</body>
+</html>

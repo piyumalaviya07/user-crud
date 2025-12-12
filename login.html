@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>    
+    <div class="login-container">
+        <h1>LOGIN</h1>
+        <form onsubmit="return validateForm()">
+        <div class="input-group">
+            <label>UserName</label>
+            <input type="text" id="username" placeholder="Enter Your Username">
+            <p id="usernameError" class="error"></p>
+        </div>
+        <div class="input-group">
+            <label for="email">E-Mail</label>
+            <input type="email" id="email" placeholder="your@email.com">
+            <p id="emailError" class="error"></p>
+        </div>
+       
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="••••••">
+            <p id="passwordError" class="error"></p>
+        </div>
+        
+        <button type="submit" id="login" onsubmit="validateForm()">LOGIN</button>
+         
+        <div class="footer">
+            Don't have an account? <a href="registration.html">Sign up</a>
+        </div>
+        </form>
+    </div>
+    <script>
+        function validateForm(){
+            let username=document.getElementById("username").value;
+            let email=document.getElementById("email").value;
+            let password=document.getElementById("password").value;
+
+            let usernameError=document.getElementById("usernameError");
+            let emailError=document.getElementById("emailError");
+            let passwordError=document.getElementById("passwordError");
+
+            let valid=true;
+            usernameError.textContent="";
+            emailError.textContent="";
+            passwordError.textContent="";
+
+            if(username===""){
+            usernameError.textContent="Username is Required!";
+            valid=false;
+            }
+
+            if(email===""){
+                emailError.textContent="Email is Required!";
+                valid=false;
+            }else if(!email.includes("@")){
+                emailError.textContent="Email must contain @ symbol!";
+                valid=false;
+            }
+
+            if(password===""){
+                passwordError.textContent="Password is Required!";
+                valid=false;
+            }
+            else if(password.length<6){
+                passwordError.textContent="Password must be required 6 characters!";
+                valid=false;
+            }
+            if(valid){
+                localStorage.setItem("username",username);
+                localStorage.setItem("email",email);
+
+                // window.location.href = "view.html";
+                clearForm();
+            }
+        return false;
+        }
+
+        function clearForm(){
+            document.getElementById("username").value="";
+            document.getElementById("email").value="";
+            document.getElementById("password").value="";
+        }
+    </script>
+</body>
+</html>
